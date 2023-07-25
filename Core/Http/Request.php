@@ -10,8 +10,8 @@ class Request
             parse_url($_SERVER['REQUEST_URI'])['path'],
             '/');
     }
-    public static function method()
+    public static function method(): string
     {
-        return $_SERVER['REQUEST_METHOD'];
+        return strtoupper($_SERVER['REQUEST_METHOD']);
     }
 }

@@ -36,10 +36,10 @@ class Router
         return $this->add('PUT', $uri, $controller);
     }
 
-    public static function load($file): static
+    public static function load($routesFile): static
     {
         $router = new static();
-        require base_path($file);
+        require base_path($routesFile);
         return $router;
     }
     public function route($uri, $method)
