@@ -12,6 +12,6 @@ class Request
     }
     public static function method(): string
     {
-        return strtoupper($_SERVER['REQUEST_METHOD']);
+        return $_SERVER['REQUEST_METHOD'];
     }
 }
