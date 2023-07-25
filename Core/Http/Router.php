@@ -36,11 +36,17 @@ class Router
         return $this->add('PUT', $uri, $controller);
     }
 
+    public static function load($file): static
+    {
+        $router = new static();
+        require base_path($file);
+        return $router;
+    }
     public function route($uri, $method)
     {
         foreach ($this->routes as $route) {
             if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
-                return require(BASE_PATH . "App/Controllers" . $route['controller']);
+                return require base_path("App/Controllers" . $route['controller']);
             }
         }
         return $this->abort();
@@ -48,6 +54,6 @@ class Router
     protected function abort($code = Response::NOT_FOUND)
     {
         http_response_code($code);
-        return view("{$code}.php");
+        return view("Errors/{$code}.php");
     }
 }

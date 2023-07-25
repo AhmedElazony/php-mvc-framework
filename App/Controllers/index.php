@@ -1,3 +1,5 @@
 <?php
 
-echo '<h1>Home Page</h1>';
+view("index.view.php", [
+    'heading' => 'Home'
+]);
