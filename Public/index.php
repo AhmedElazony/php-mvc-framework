@@ -9,5 +9,7 @@ require BASE_PATH . 'vendor/autoload.php';
 
 require BASE_PATH . 'Core/functions.php';
 
+require base_path('bootstrap.php');
+
 Router::load('routes.php')
     ->route(Request::uri(), Request::method());
