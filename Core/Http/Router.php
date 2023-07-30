@@ -4,36 +4,33 @@ namespace Core\Http;
 
 class Router
 {
-    protected array $routes = [];
+    protected static array $routes = [];
 
-    protected function add($method, $uri, $controller): Router
+    protected static function add($method, $uri, $controller): Router
     {
-        $this->routes[] = [
-            'uri' => $uri,
-            'method' => $method,
-            'controller' => $controller
-        ];
-        return $this;
+        static::$routes[$method][$uri] = $controller;
+
+        return new static;
     }
-    public function get($uri, $controller): Router
+    public static function get($uri, $controller): Router
     {
-        return $this->add('GET', $uri, $controller);
+        return static::add('GET', $uri, $controller);
     }
-    public function post($uri, $controller): Router
+    public static function post($uri, $controller): Router
     {
-        return $this->add('POST', $uri, $controller);
+        return static::add('POST', $uri, $controller);
     }
-    public function delete($uri, $controller): Router
+    public static function delete($uri, $controller): Router
     {
-        return $this->add('DELETE', $uri, $controller);
+        return static::add('DELETE', $uri, $controller);
     }
-    public function patch($uri, $controller): Router
+    public static function patch($uri, $controller): Router
     {
-        return $this->add('PATCH', $uri, $controller);
+        return static::add('PATCH', $uri, $controller);
     }
-    public function put($uri, $controller): Router
+    public static function put($uri, $controller): Router
     {
-        return $this->add('PUT', $uri, $controller);
+        return static::add('PUT', $uri, $controller);
     }
 
     public static function load($routesFile): static
@@ -42,18 +39,20 @@ class Router
         require base_path($routesFile);
         return $router;
     }
-    public function route($uri, $method)
+    public function resolve($uri, $method)
     {
-        foreach ($this->routes as $route) {
-            if ($route['uri'] === $uri && $route['method'] === strtoupper($method)) {
-                return require base_path("App/Controllers" . $route['controller']);
-            }
+        $controllerAction = self::$routes[strtoupper($method)][$uri] ?? false;
+        if (! $controllerAction) {
+            return $this->abort();
         }
-        return $this->abort();
+
+        $controller = new ('App\\Controllers\\' . explode('@', $controllerAction)[0]);
+        $action =  explode('@', $controllerAction)[1];
+        return call_user_func([$controller, $action]);
     }
     protected function abort($code = Response::NOT_FOUND)
     {
         http_response_code($code);
-        return view("Errors/{$code}.php");
+        return view("Errors/{$code}");
     }
 }

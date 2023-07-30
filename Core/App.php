@@ -2,28 +2,31 @@
 
 namespace Core;
 
+use Core\Http\Request;
+use Core\Http\Router;
+
 class App
 {
-    protected static Container $container;
+    protected static array $bindings = [];
 
-    public static function setContainer(Container $container): void
+    public static function run()
     {
-        static::$container = $container;
+        return Router::load('Routes/web.php')
+            ->resolve(Request::uri(), Request::method());
     }
 
-    public static function container(): Container
+    public static function bind(string $key, callable $value): void // add
     {
-        return static::$container;
+        self::$bindings[$key] = $value;
     }
-
-    public static function bind($key, $value): void // add
+    public static function resolve(string $key) // get
     {
-        static::container()->bind($key, $value);
-    }
-    public static function resolve($key) // get
-    {
-       return static::container()->resolve($key);
-    }
+        if (! array_key_exists($key, self::$bindings)) {
+            throw new \Exception('Key Not Found!');
+        }
 
+        $resolver = self::$bindings[$key];
 
+        return call_user_func($resolver);
+    }
 }
