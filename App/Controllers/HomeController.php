@@ -17,4 +17,11 @@ class HomeController
             'heading' => 'About'
         ]);
     }
+
+    public function contact()
+    {
+        return view('contact', [
+            'heading' => 'Contact Us!'
+        ]);
+    }
 }

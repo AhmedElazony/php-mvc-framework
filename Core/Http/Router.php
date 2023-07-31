@@ -35,24 +35,34 @@ class Router
 
     public static function load($routesFile): static
     {
-        $router = new static();
         require base_path($routesFile);
-        return $router;
+        return new static;
     }
-    public function resolve($uri, $method)
+    public static function resolve($uri, $method)
     {
         $controllerAction = self::$routes[strtoupper($method)][$uri] ?? false;
-        if (! $controllerAction) {
-            return $this->abort();
-        }
 
-        $controller = new ('App\\Controllers\\' . explode('@', $controllerAction)[0]);
-        $action =  explode('@', $controllerAction)[1];
-        return call_user_func([$controller, $action]);
+        if ($controllerAction) {
+            if (is_string($controllerAction)) {
+                $parts = explode('@', $controllerAction);
+
+                $controller = 'App\\Controllers\\' . $parts[0];
+                $action = $parts[1];
+
+                if (class_exists($controller)) {
+                    if (method_exists($controller, $action)) {
+                        return (new $controller)->$action();
+                    }
+                }
+            }
+        }
+        return (new Router)->abort();
     }
     protected function abort($code = Response::NOT_FOUND)
     {
-        http_response_code($code);
-        return view("Errors/{$code}");
+        Response::setStatusCode($code);
+        return view("Errors/{$code}", [
+            'heading' => "Error {$code}!"
+        ]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use Core\App;
+use Core\Application as App;
 use Core\Database\Connection;
 use Core\Database\QueryBuilder;
 

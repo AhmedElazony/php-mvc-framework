@@ -5,14 +5,14 @@ namespace Core;
 use Core\Http\Request;
 use Core\Http\Router;
 
-class App
+class Application
 {
     protected static array $bindings = [];
 
     public static function run()
     {
         return Router::load('Routes/web.php')
-            ->resolve(Request::uri(), Request::method());
+            ::resolve(Request::uri(), Request::method());
     }
 
     public static function bind(string $key, callable $value): void // add

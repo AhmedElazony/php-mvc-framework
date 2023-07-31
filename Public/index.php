@@ -1,6 +1,6 @@
 <?php
 
-use Core\App;
+use Core\Application as App;
 
 const BASE_PATH = __Dir__ . '/../';
 
