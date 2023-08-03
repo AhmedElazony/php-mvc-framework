@@ -1,11 +1,12 @@
 <?php
 
 use Core\Application as App;
-use Core\Database\Connection;
+use Core\Database\Database;
 use Core\Database\QueryBuilder;
 
-App::bind('database', function () {
+App::setContainer(new \Core\Container());
+App::bind(Database::class, function () {
     $config = require base_path('Config/config.php');
 
-    return new QueryBuilder(Connection::make($config['database']));
+    return new QueryBuilder(Database::connect($config['database']));
 });

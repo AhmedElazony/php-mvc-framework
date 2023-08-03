@@ -2,35 +2,40 @@
 
 namespace Core\Http;
 
+use Core\Middleware\Middleware;
+
 class Router
 {
     protected static array $routes = [];
 
-    protected static function add($method, $uri, $controller): Router
+    protected static function add($method, $uri, $controller, $middleware): void
     {
-        static::$routes[$method][$uri] = $controller;
+        static::$routes[$method][$uri] = [
+            'controller' => $controller,
+            'middleware' => $middleware
+        ];
 
-        return new static;
+//        return new static;
     }
-    public static function get($uri, $controller): Router
+    public static function get($uri, $controller, $only = null): void
     {
-        return static::add('GET', $uri, $controller);
+        static::add('GET', $uri, $controller, $only);
     }
-    public static function post($uri, $controller): Router
+    public static function post($uri, $controller, $only = null): void
     {
-        return static::add('POST', $uri, $controller);
+        static::add('POST', $uri, $controller, $only);
     }
-    public static function delete($uri, $controller): Router
+    public static function delete($uri, $controller, $only = null): void
     {
-        return static::add('DELETE', $uri, $controller);
+        static::add('DELETE', $uri, $controller, $only);
     }
-    public static function patch($uri, $controller): Router
+    public static function patch($uri, $controller, $only = null): void
     {
-        return static::add('PATCH', $uri, $controller);
+        static::add('PATCH', $uri, $controller, $only);
     }
-    public static function put($uri, $controller): Router
+    public static function put($uri, $controller, $only = null): void
     {
-        return static::add('PUT', $uri, $controller);
+        static::add('PUT', $uri, $controller, $only);
     }
 
     public static function load($routesFile): static
@@ -40,14 +45,17 @@ class Router
     }
     public static function resolve($uri, $method)
     {
-        $controllerAction = self::$routes[strtoupper($method)][$uri] ?? false;
+        $route = self::$routes[strtoupper($method)][$uri] ?? false;
 
-        if ($controllerAction) {
-            if (is_string($controllerAction)) {
-                $parts = explode('@', $controllerAction);
+        if ($route) {
+            if (is_string($route['controller'])) {
+                $parts = explode('@', $route['controller']);
 
                 $controller = 'App\\Controllers\\' . $parts[0];
                 $action = $parts[1];
+
+                // handle The Requested Middleware.
+                Middleware::handle($route['middleware']);
 
                 if (class_exists($controller)) {
                     if (method_exists($controller, $action)) {
@@ -58,7 +66,7 @@ class Router
         }
         return (new Router)->abort();
     }
-    protected function abort($code = Response::NOT_FOUND)
+    public function abort($code = Response::NOT_FOUND)
     {
         Response::setStatusCode($code);
         return view("Errors/{$code}", [

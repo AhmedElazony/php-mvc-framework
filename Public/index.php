@@ -2,6 +2,8 @@
 
 use Core\Application as App;
 
+session_start();
+
 const BASE_PATH = __Dir__ . '/../';
 
 require BASE_PATH . 'vendor/autoload.php';

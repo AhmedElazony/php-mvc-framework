@@ -24,4 +24,25 @@ class HomeController
             'heading' => 'Contact Us!'
         ]);
     }
+
+    public function loginUser()
+    {
+        return view('Session/create', [
+            'heading' => 'Login'
+        ]);
+    }
+
+    public function registerUser()
+    {
+        return view('Registration/create', [
+            'heading' => 'Register'
+        ]);
+    }
+
+    public function editPassword()
+    {
+        return view('Password/update', [
+            'heading' => 'Update Password'
+        ]);
+    }
 }

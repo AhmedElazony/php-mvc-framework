@@ -2,12 +2,14 @@
 
 namespace Core;
 
+use Core\Database\QueryBuilder;
 use Core\Http\Request;
 use Core\Http\Router;
+use Exception;
 
 class Application
 {
-    protected static array $bindings = [];
+    protected static Container $container;
 
     public static function run()
     {
@@ -15,18 +17,22 @@ class Application
             ::resolve(Request::uri(), Request::method());
     }
 
-    public static function bind(string $key, callable $value): void // add
+    public static function setContainer(Container $container = new Container()): void
     {
-        self::$bindings[$key] = $value;
+        self::$container = $container;
     }
+    public static function container(): Container
+    {
+        return self::$container;
+    }
+
+    public static function bind(string $key, $value): void // add
+    {
+        self::container()->bind($key, $value);
+    }
+
     public static function resolve(string $key) // get
     {
-        if (! array_key_exists($key, self::$bindings)) {
-            throw new \Exception('Key Not Found!');
-        }
-
-        $resolver = self::$bindings[$key];
-
-        return call_user_func($resolver);
+        return self::container()->resolve($key);
     }
 }
