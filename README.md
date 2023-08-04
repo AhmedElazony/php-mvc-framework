@@ -22,3 +22,9 @@ composer init
 - Then, type your preferences and then copy the [composer.json](https://github.com/AhmedElazony/php-mvc-project/blob/main/composer.json) autoload section into your composer.json file
 
 - Finally, use These [Database Statements](https://github.com/AhmedElazony/php-mvc-project/blob/main/databaseFile.sql) to make The database of the app, then edit the [Config file](https://github.com/AhmedElazony/php-mvc-project/blob/main/Config/config.php) And The DB [Connection Class](https://github.com/AhmedElazony/php-mvc-project/blob/main/Core/Database/Connection.php) with your configurations.
+
+Now, you can navigate the Public Directory and type this command:
+```bash
+php -S localhost:8888
+```
+And Access The Application in your browser at http://localhost:8888
