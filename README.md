@@ -6,7 +6,7 @@
  
 The Framework includes:
 
-- **Routing System
-- **Database QueryBuilder Class
-- **Simple Authentication System
-- **Simple Container
+- **Routing System**
+- **Database QueryBuilder Class**
+- **Simple Authentication System**
+- **Simple Container**
