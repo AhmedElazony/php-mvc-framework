@@ -52,9 +52,7 @@ class QueryBuilder extends Database
     {
         $sqlParams = $this->parseSqlParams($params);
 
-        $column = explode(' = ', $columnValue)[0];
-        $value = explode(' = ', $columnValue)[1];
-        $sql = "UPDATE {$table} SET {$column} = '{$value}' WHERE {$sqlParams['columns']} = {$sqlParams['wildCards']}";
+        $sql = "UPDATE {$table} SET " . $columnValue . " WHERE {$sqlParams['columns']} = {$sqlParams['wildCards']}";
 
         return $this->query($sql, $params);
     }

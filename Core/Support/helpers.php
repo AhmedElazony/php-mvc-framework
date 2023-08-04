@@ -1,7 +1,9 @@
 <?php
 
+use Core\ErrorBag;
 use Core\Http\Response;
-use Core\Http\Router;
+use Core\Application as App;
+use Core\Database\Database;
 use Core\Session;
 use JetBrains\PhpStorm\NoReturn;
 
@@ -26,7 +28,10 @@ function view($file, $params = []): mixed
 
 function model($model)
 {
-    return require base_path("App/Models/{$model}.php");
+    if (! class_exists($model)) {
+        return new \Exception("{$model} Doesn't Exist!");
+    }
+    return (new $model(App::resolve(Database::class)));
 }
 
 function urlIs($url): bool
@@ -72,4 +77,12 @@ function abort($code = Response::NOT_FOUND)
     return view("Errors/{$code}", [
         'heading' => "Error {$code}!"
     ]);
+}
+
+function showErrors($viewFile, $params): void
+{
+    if (! empty(ErrorBag::errors())) {
+        view("Notes/{$viewFile}", $params);
+        exit;
+    }
 }

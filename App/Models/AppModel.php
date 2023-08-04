@@ -38,6 +38,11 @@ class AppModel extends Model
         redirect("/notes");
     }
 
+    #[NoReturn] public function editNote($noteId, $title, $body)
+    {
+        $this->db->update('note', "title = '{$title}', body = '{$body}'", ['id' => $noteId]);
+        redirect("/note?id=$noteId");
+    }
     #[NoReturn] public function deleteNote(array $params)
     {
         $this->db->delete('note', $params);

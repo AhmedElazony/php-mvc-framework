@@ -8,6 +8,7 @@
     <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <form action="/notes/edit" method="POST">
             <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="id" value="<?= $note['id']; ?>">
             <div class="space-y-12">
                 <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                     <div class="sm:col-span-4">

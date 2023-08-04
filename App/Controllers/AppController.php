@@ -7,17 +7,17 @@ use App\Models\UserModel;
 use Core\Database\Database;
 use Core\Application as App;
 use Core\ErrorBag;
-use Core\Validator;
+use Core\Validator as Validate;
 use JetBrains\PhpStorm\NoReturn;
 
 class AppController
 {
     public function index()
     {
-        $userModel = new UserModel(App::resolve(Database::class));
+        $userModel = model(UserModel::class);
         $user = $userModel->getUser(['id' => $_SESSION['user']['id']]);
 
-        $appModel = new AppModel(App::resolve(Database::class));
+        $appModel = model(AppModel::class);
         $notes = $appModel->getNotes("user_id = :user_id", ['user_id' => $user['id']]);
 
         return view("Notes/index", [
@@ -37,10 +37,10 @@ class AppController
         {
             redirect("/notes");
         }
-        $userModel = new UserModel(App::resolve(Database::class));
+        $userModel = model(UserModel::class);
         $user = $userModel->getUser(['id' => $_SESSION['user']['id']]);
 
-        $appModel = new AppModel(App::resolve(Database::class));
+        $appModel = model(AppModel::class);
         $note = $appModel->getNote(['id' => $_GET['id']]);
 
         authorize($user['id'] === ($note['user_id'] ?? false));
@@ -55,7 +55,7 @@ class AppController
     }
     public function edit()
     {
-        $appModel = new AppModel(App::resolve(Database::class));
+        $appModel = model(AppModel::class);
         $note = $appModel->getNote(['id' => $_GET['id']]);
 
         return view("Notes/edit",[
@@ -68,41 +68,34 @@ class AppController
         $title = $_POST['title'] ?? '';
         $body = $_POST['body'] ?? '';
 
-        $userModel = new UserModel(App::resolve(Database::class));
+        $userModel = model(UserModel::class);
         $user = $userModel->getUser(['id' => $_SESSION['user']['id']]);
-        $currentUserId = $user['id'];
 
-        if (! Validator::string($title, 7, 25)) {
+        if (! Validate::string($title, 7, 25)) {
             ErrorBag::setError('title', 'A Title between 7 and 55 Chars is Required!');
         }
-        if (! Validator::string($body, 7, 255)) {
+        if (! Validate::string($body, 7, 255)) {
             ErrorBag::setError('body', 'A Note Body between 7 and 255 Chars is Required!');
         }
 
-        if (! empty(ErrorBag::errors())) {
-            view('Notes/edit',[
-                'errors' => ErrorBag::errors()
-            ]);
-            exit;
-        }
+        showErrors('edit', ['errors' => ErrorBag::errors()]);
 
-        $appModel = new AppModel(App::resolve(Database::class));
-        $appModel->saveNote($title, $body, $currentUserId);
-
+        $appModel = model(AppModel::class);
+        $note = $appModel->getNote(['id' => $_POST['id']]);
+        $appModel->editNote($note['id'], $title, $body);
     }
     #[NoReturn] public function saveNote(): void
     {
         $title = $_POST['title'] ?? '';
         $body = $_POST['body'] ?? '';
 
-        $userModel = new UserModel(App::resolve(Database::class));
+        $userModel = model(UserModel::class);
         $user = $userModel->getUser(['id' => $_SESSION['user']['id']]);
-        $currentUserId = $user['id'];
 
-        if (! Validator::string($title, 7, 25)) {
+        if (! Validate::string($title, 7, 25)) {
             ErrorBag::setError('title', 'A Title between 7 and 25 Chars is Required!');
         }
-        if (! Validator::string($body, 7, 255)) {
+        if (! Validate::string($body, 7, 255)) {
             ErrorBag::setError('body', 'A Note Body between 7 and 255 Chars is Required!');
         }
 
@@ -113,23 +106,23 @@ class AppController
             exit;
         }
 
-        $appModel = new AppModel(App::resolve(Database::class));
-        $appModel->saveNote($title, $body, $currentUserId);
+        $appModel = model(AppModel::class);
+        $appModel->saveNote($title, $body, $user['id']);
     }
 
     #[NoReturn] public function addComment(): void
     {
         $comment = $_POST['comment'] ?? '';
 
-        $userModel = new UserModel(App::resolve(Database::class));
+        $userModel = model(UserModel::class);
         $user = $userModel->getUser(['id' => $_SESSION['user']['id']]);
 
-        $appModel = new AppModel(App::resolve(Database::class));
+        $appModel = model(AppModel::class);
         $note = $appModel->getNote(['id' => $_GET['id']]);
 
         $comments = $appModel->getComments('note_id = :note_id', ['note_id' => $note['id']]);
 
-        if (! Validator::string($comment, 7, 255)) {
+        if (! Validate::string($comment, 7, 255)) {
             ErrorBag::setError('comment', 'A Comment between 7 and 255 Chars is Required!');
         }
 
@@ -147,12 +140,12 @@ class AppController
     }
     #[NoReturn] public function deleteNote(): void
     {
-        $appModel = new AppModel(App::resolve(Database::class));
+        $appModel = model(AppModel::class);
         $appModel->deleteNote(['id' => $_POST['id']]);
     }
     #[NoReturn] public function deleteComment(): void
     {
-        $appModel = new AppModel(App::resolve(Database::class));
+        $appModel = model(AppModel::class);
         $appModel->deleteComment(['id' => $_POST['id']]);
     }
 }
