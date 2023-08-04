@@ -13,7 +13,7 @@ The Framework includes:
 
 ## To Use The Project
 
-download the composer from [The Website](https://getcomposer.org/) and install the composer:
+- download the composer from [The Website](https://getcomposer.org/) and install the composer:
 
 - In The Project Directory open the command line and type:
 ```bash
