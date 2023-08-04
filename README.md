@@ -10,3 +10,13 @@ The Framework includes:
 - **Database QueryBuilder Class**
 - **Simple Authentication System**
 - **Simple Container**
+
+## To Use The Project
+
+download the composer from [The Website](https://getcomposer.org/) and install the composer:
+
+- In The Project Directory open the command line and type:
+```bash
+composer init
+```
+Then, type your preferences and then copy the [composer.json](https://github.com/AhmedElazony/php-mvc-project/blob/main/composer.json) autoload section into your composer.json file
