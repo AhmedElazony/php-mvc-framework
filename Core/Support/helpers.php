@@ -5,6 +5,7 @@ use Core\Http\Response;
 use Core\Application as App;
 use Core\Database\Database;
 use Core\Session;
+use Core\Validator as Validate;
 use JetBrains\PhpStorm\NoReturn;
 
 function dump_die($var): void
@@ -28,9 +29,9 @@ function view($file, $params = []): mixed
 
 function model($model)
 {
-    if (! class_exists($model)) {
-        return new \Exception("{$model} Doesn't Exist!");
-    }
+//    if (! class_exists($model)) {
+//        exit;
+//    }
     return (new $model(App::resolve(Database::class)));
 }
 
@@ -85,4 +86,19 @@ function showErrors($viewFile, $params): void
         view("Notes/{$viewFile}", $params);
         exit;
     }
+}
+
+function getNoteInputs(): array
+{
+    $title = $_POST['title'] ?? '';
+    $body = $_POST['body'] ?? '';
+
+    if (! Validate::string($title, 7, 25)) {
+        ErrorBag::setError('title', 'A Title between 7 and 55 Chars is Required!');
+    }
+    if (! Validate::string($body, 7, 255)) {
+        ErrorBag::setError('body', 'A Note Body between 7 and 255 Chars is Required!');
+    }
+
+    return ['title' => $title, 'body' => $body, 'errors' => ErrorBag::errors()];
 }

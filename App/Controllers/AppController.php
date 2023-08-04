@@ -65,49 +65,25 @@ class AppController
     }
     #[NoReturn] public function editNote(): void
     {
-        $title = $_POST['title'] ?? '';
-        $body = $_POST['body'] ?? '';
+        $inputs = getNoteInputs();
 
-        $userModel = model(UserModel::class);
-        $user = $userModel->getUser(['id' => $_SESSION['user']['id']]);
-
-        if (! Validate::string($title, 7, 25)) {
-            ErrorBag::setError('title', 'A Title between 7 and 55 Chars is Required!');
-        }
-        if (! Validate::string($body, 7, 255)) {
-            ErrorBag::setError('body', 'A Note Body between 7 and 255 Chars is Required!');
-        }
-
-        showErrors('edit', ['errors' => ErrorBag::errors()]);
+        showErrors('edit', ['errors' => $inputs['errors']]);
 
         $appModel = model(AppModel::class);
         $note = $appModel->getNote(['id' => $_POST['id']]);
-        $appModel->editNote($note['id'], $title, $body);
+        $appModel->editNote($note['id'], $inputs['title'], $inputs['body']);
     }
     #[NoReturn] public function saveNote(): void
     {
-        $title = $_POST['title'] ?? '';
-        $body = $_POST['body'] ?? '';
+        $inputs = getNoteInputs();
+
+        showErrors("create", ['errors' => $inputs['errors']]);
 
         $userModel = model(UserModel::class);
         $user = $userModel->getUser(['id' => $_SESSION['user']['id']]);
 
-        if (! Validate::string($title, 7, 25)) {
-            ErrorBag::setError('title', 'A Title between 7 and 25 Chars is Required!');
-        }
-        if (! Validate::string($body, 7, 255)) {
-            ErrorBag::setError('body', 'A Note Body between 7 and 255 Chars is Required!');
-        }
-
-        if (! empty(ErrorBag::errors())) {
-            view('Notes/create',[
-                'errors' => ErrorBag::errors()
-            ]);
-            exit;
-        }
-
         $appModel = model(AppModel::class);
-        $appModel->saveNote($title, $body, $user['id']);
+        $appModel->saveNote($inputs['title'], $inputs['body'], $user['id']);
     }
 
     #[NoReturn] public function addComment(): void
