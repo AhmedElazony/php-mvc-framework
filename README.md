@@ -27,4 +27,4 @@ Now, you can navigate the Public Directory and type this command:
 ```bash
 php -S localhost:8888
 ```
-And Access The Application in your browser at http://localhost:8888
+And Access The Application in your browser at http://localhost:8888.
