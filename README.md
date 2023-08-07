@@ -1,4 +1,4 @@
-# A PHP Project Using A simple MVC Framework
+# A PHP Project Using a simple MVC Framework
 
 > Note: This is A Simple Framework That Needs Too much Code Refactoring and 
 > Some Function Needs Validations.
@@ -19,11 +19,11 @@ The Framework includes:
 ```bash
 composer init
 ```
-- Then, type your preferences and then copy the [composer.json](https://github.com/AhmedElazony/php-mvc-project/blob/main/composer.json) autoload section into your composer.json file
+- Then, type your preferences and then copy the [composer.json](https://github.com/AhmedElazony/php-mvc-project/blob/main/composer.json) autoload and require section into your composer.json file
 
-- Finally, use These [Database Statements](https://github.com/AhmedElazony/php-mvc-project/blob/main/databaseFile.sql) to make The database of the app, then edit the [Config file](https://github.com/AhmedElazony/php-mvc-project/blob/main/Config/config.php) And The DB [Connection Class](https://github.com/AhmedElazony/php-mvc-project/blob/main/Core/Database/Connection.php) with your configurations.
+- Finally, use These [Database Statements](https://github.com/AhmedElazony/php-mvc-project/blob/main/databaseFile.sql) to make The database of the app, then edit the [.env file](https://github.com/AhmedElazony/php-mvc-project/blob/main/.env) with your configurations.
 
-Now, you can navigate the Public Directory and type this command:
+Now, you can navigate to the Public Directory and type this command:
 ```bash
 php -S localhost:8888
 ```
