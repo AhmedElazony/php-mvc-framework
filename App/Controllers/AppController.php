@@ -71,7 +71,8 @@ class AppController
 
         $appModel = model(AppModel::class);
         $note = $appModel->getNote(['id' => $_POST['id']]);
-        $appModel->editNote($note['id'], $inputs['title'], $inputs['body']);
+        // To Escape The ('). So, It doesn't make a pdo Exception because of the update statement in The AppModel Class.
+        $appModel->editNote($note['id'], addslashes($inputs['title']), addslashes($inputs['body']));
     }
     #[NoReturn] public function saveNote(): void
     {
