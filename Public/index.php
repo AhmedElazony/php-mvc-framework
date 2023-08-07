@@ -8,6 +8,9 @@ const BASE_PATH = __Dir__ . '/../';
 
 require BASE_PATH . 'vendor/autoload.php';
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
+$dotenv->load();
+
 require BASE_PATH . 'Core/Support/helpers.php';
 
 require base_path('bootstrap.php');
