@@ -80,7 +80,7 @@ function abort($code = Response::NOT_FOUND)
     ]);
 }
 
-function showErrors($viewFile, $params): void
+function showErrors($viewFile, $params = []): void
 {
     if (! empty(ErrorBag::errors())) {
         view("Notes/{$viewFile}", $params);

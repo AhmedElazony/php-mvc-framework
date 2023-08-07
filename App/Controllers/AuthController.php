@@ -24,7 +24,7 @@ class AuthController
             ErrorBag::setError('password', 'Password Is Not Valid!');
         }
 
-        $this->userModel = new UserModel(App::resolve(Database::class));
+        $this->userModel = model(UserModel::class);
         $this->userModel->LoginUser($email, $password);
     }
 
@@ -67,7 +67,7 @@ class AuthController
             exit;
         }
 
-        $this->userModel = new UserModel(App::resolve(Database::class));
+        $this->userModel = model(UserModel::class);
         $this->userModel->updatePassword($email, $newPassword);
     }
 

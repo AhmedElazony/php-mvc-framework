@@ -88,7 +88,7 @@ class UserModel extends Model
             ErrorBag::setError('email', 'This Email Does Not Exist!');
         } else {
             // Update Password, Redirect To Login Page.
-            $this->update('password = ' .  password_hash($newPassword, PASSWORD_BCRYPT), ['email' => $email]);
+            $this->update("password = '" .  password_hash($newPassword, PASSWORD_BCRYPT) . "'", ['email' => $email]);
             redirect("/login");
         }
 
