@@ -43,7 +43,7 @@ class Router
         require base_path($routesFile);
         return new static;
     }
-    public static function resolve($uri, $method)
+    public function resolve($uri, $method)
     {
         $route = self::$routes[strtoupper($method)][$uri] ?? false;
 
@@ -51,26 +51,26 @@ class Router
             if (is_string($route['controller'])) {
                 $parts = explode('@', $route['controller']);
 
-                $controller = 'App\\Controllers\\' . $parts[0];
-                $action = $parts[1];
-
                 // handle The Requested Middleware.
                 Middleware::handle($route['middleware']);
 
-                if (class_exists($controller)) {
-                    if (method_exists($controller, $action)) {
-                        return (new $controller)->$action();
-                    }
-                }
+                $controller = 'App\\Controllers\\' . $parts[0];
+                $action = $parts[1];
+
+                return $this->callAction($controller, $action);
             }
         }
-        return (new Router)->abort();
+        return abort();
     }
-    public function abort($code = Response::NOT_FOUND)
+
+    protected function callAction($controller, $action)
     {
-        Response::setStatusCode($code);
-        return view("Errors/{$code}", [
-            'heading' => "Error {$code}!"
-        ]);
+        if (class_exists($controller)) {
+            if (method_exists($controller, $action)) {
+                return (new $controller)->$action();
+            }
+        }
+
+        return "{$controller} does not respond to the {$action} action.";
     }
 }

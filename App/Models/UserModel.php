@@ -6,7 +6,7 @@ use Core\ErrorBag;
 
 class UserModel extends Model
 {
-    public function setUser($username, $email, $password)
+    public function setUser($username, $email, $password): void
     {
         $this->db->insert('user', [
             'username' => $username,

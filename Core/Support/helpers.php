@@ -62,12 +62,13 @@ function authorize($condition, $code = Response::FORBIDDEN): void
         exit;
     }
 }
-
+// TODO: Refactor
 function login($user, $attribute = []): void
 {
     Session::put($user, $attribute);
     session_regenerate_id(true);
 }
+// TODO: Refactor
 function logout($user): void
 {
     Session::destroy();
@@ -80,6 +81,7 @@ function abort($code = Response::NOT_FOUND)
     ]);
 }
 
+/* TODO: Refactor */
 function showErrors($viewFile, $params = []): void
 {
     if (! empty(ErrorBag::errors())) {
@@ -88,6 +90,7 @@ function showErrors($viewFile, $params = []): void
     }
 }
 
+/* TODO: Refactor */
 function getNoteInputs(): array
 {
     $title = $_POST['title'] ?? '';
@@ -101,4 +104,15 @@ function getNoteInputs(): array
     }
 
     return ['title' => $title, 'body' => $body, 'errors' => ErrorBag::errors()];
+}
+
+function getInputs(array $data): array
+{
+    $inputs = [];
+    foreach ($data as $key)
+    {
+        $inputs[$key] = $_POST[$key] ?? '';
+    }
+
+    return $inputs;
 }

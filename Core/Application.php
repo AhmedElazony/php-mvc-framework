@@ -14,7 +14,7 @@ class Application
     public static function run()
     {
         return Router::load('Routes/web.php')
-            ::resolve(Request::uri(), Request::method());
+            ->resolve(Request::uri(), Request::method());
     }
 
     public static function setContainer(Container $container = new Container()): void
