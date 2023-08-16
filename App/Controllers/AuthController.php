@@ -12,51 +12,51 @@ use Core\Validator as Validate;
 class AuthController
 {
     protected UserModel $userModel;
+
+    public function __construct()
+    {
+        $this->userModel = model(UserModel::class);
+    }
+
     public function loginUser(): void
     {
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
+        $inputs = getInputs(['email', 'password']);
 
-        if (!Validate::email($email)) {
+        if (!Validate::email($inputs['email'])) {
             ErrorBag::setError('email', 'Please Enter A Valid Email.');
         }
-        if (!Validate::string($password, 8, 255)) {
+        if (!Validate::string($inputs['password'], 8, 255)) {
             ErrorBag::setError('password', 'Password Is Not Valid!');
         }
 
-        $this->userModel = model(UserModel::class);
-        $this->userModel->LoginUser($email, $password);
+        $this->userModel->LoginUser($inputs['email'], $inputs['password']);
     }
 
     public function registerUser(): void
     {
-        $username = $_POST['username'] ?? '';
-        $email = $_POST['email'] ?? '';
-        $password = $_POST['password'] ?? '';
+        $inputs = getInputs(['username', 'email', 'password']);
 
-        if (!Validate::string($username, 5, 55)) {
+        if (!Validate::string($inputs['username'], 5, 55)) {
             ErrorBag::setError('username', 'A Valid Username Should Be Between 5 and 55 Characters.');
         }
-        if (!Validate::email($email)) {
+        if (!Validate::email($inputs['email'])) {
             ErrorBag::setError('email','Please Enter A Valid Email.');
         }
-        if (!Validate::string($password, 8, 255)) {
+        if (!Validate::string($inputs['password'], 8, 255)) {
             ErrorBag::setError('password','A Valid Password Should Be Between 8 and 255 Characters.');
         }
 
-        $this->userModel = new UserModel(App::resolve(Database::class));
-        $this->userModel->registerUser($username, $email, $password);
+        $this->userModel->registerUser($inputs['username'], $inputs['email'], $inputs['password']);
     }
 
     public function updatePassword(): void
     {
-        $email = $_POST['email'] ?? '';
-        $newPassword = $_POST['password'] ?? '';
+        $inputs = getInputs(['email', 'password']);
 
-        if (! Validate::email($email)) {
+        if (! Validate::email($inputs['email'])) {
            ErrorBag::setError('email', 'Email Is Not Valid!');
         }
-        if (! Validate::string($newPassword, 8, 255)) {
+        if (! Validate::string($inputs['password'], 8, 255)) {
             ErrorBag::setError('password', 'Password Should Be Between 8 and 255 Characters!');
         }
 
@@ -67,8 +67,7 @@ class AuthController
             exit;
         }
 
-        $this->userModel = model(UserModel::class);
-        $this->userModel->updatePassword($email, $newPassword);
+        $this->userModel->updatePassword($inputs['email'], $inputs['password']);
     }
 
     public function logout(): void
