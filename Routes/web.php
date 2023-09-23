@@ -5,6 +5,7 @@ use Core\Http\Router as Route;
 Route::get('', 'HomeController@index');
 Route::get('/about', 'HomeController@about');
 Route::get('/contact', 'HomeController@contact');
+Route::get('/home', 'HomeController@index');
 
 Route::get('/login', 'HomeController@loginUser', 'guest');
 Route::post('/login', 'AuthController@loginUser', 'guest');
@@ -18,7 +19,6 @@ Route::post('/notes/create', 'AppController@saveNote', 'auth');
 Route::get('/notes/edit', 'AppController@edit', 'auth');
 Route::put('/notes/edit', 'AppController@editNote', 'auth');
 Route::get('/note', 'AppController@show', 'auth');
-Route::get('/note', 'AppController@edit');
 Route::post('/note', 'AppController@addComment', 'auth');
 Route::delete('/note', 'AppController@deleteNote', 'auth');
 Route::delete('/note/deleteComment', 'AppController@deleteComment', 'auth');
