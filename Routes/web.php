@@ -5,6 +5,7 @@ use Core\Http\Router as Route;
 Route::get('', 'HomeController@index');
 Route::get('/about', 'HomeController@about');
 Route::get('/contact', 'HomeController@contact');
+Route::get('/home', 'HomeController@index');
 
 Route::get('/login', 'HomeController@loginUser', 'guest');
 Route::post('/login', 'AuthController@loginUser', 'guest');
