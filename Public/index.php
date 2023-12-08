@@ -8,7 +8,7 @@ const BASE_PATH = __Dir__ . '/../';
 
 require BASE_PATH . 'vendor/autoload.php';
 
-$dotenv = Dotenv\Dotenv::createImmutable(BASE_PATH);
+$dotenv = \Dotenv\Dotenv::createImmutable(BASE_PATH);
 $dotenv->load();
 
 require BASE_PATH . 'Core/Support/helpers.php';

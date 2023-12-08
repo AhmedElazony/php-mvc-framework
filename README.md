@@ -19,7 +19,13 @@ The Framework includes:
 ```bash
 composer init
 ```
-- Then, type your preferences and then copy the [composer.json](https://github.com/AhmedElazony/php-mvc-project/blob/main/composer.json) autoload and require sections into your composer.json file
+- Then, to install packages in the [composer.json](https://github.com/AhmedElazony/php-mvc-project/blob/main/composer.json) file, Type thies commands:
+```bash
+composer require vlucas/phpdotenv
+```
+```bash
+composer require ext-pdo
+```
 
 - Finally, use These [Database Statements](https://github.com/AhmedElazony/php-mvc-project/blob/main/databaseFile.sql) to make The database of the app, then edit the [.env file](https://github.com/AhmedElazony/php-mvc-project/blob/main/.env) with your configurations.
 
