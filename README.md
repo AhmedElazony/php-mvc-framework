@@ -1,8 +1,7 @@
 # A PHP Project Using a simple MVC Framework
 
-> Note: This is a Simple Framework That Needs Too much Code Refactoring and
+> Note: This is a Simple Framework That Some Code Refactoring and
 > Some Function Needs Validations.
-> I Will Do It Later!
  
 The Framework includes:
 
