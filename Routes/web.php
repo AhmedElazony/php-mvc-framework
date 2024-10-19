@@ -20,10 +20,10 @@ Route::get('/notes/edit', 'AppController@edit')->middleware('auth');
 Route::put('/notes/edit', 'AppController@editNote')->middleware('auth');
 Route::get('/note', 'AppController@show')->middleware('auth');
 Route::post('/note', 'AppController@addComment')->middleware('auth');
-Route::delete('/note', 'AppController@deleteNote', 'auth');
-Route::delete('/note/deleteComment', 'AppController@deleteComment', 'auth');
+Route::delete('/note', 'AppController@deleteNote')->middleware('auth');
+Route::delete('/note/deleteComment', 'AppController@deleteComment')->middleware('auth');
 
-Route::get('/password/update', 'HomeController@editPassword', 'guest');
-Route::put('/password/update', 'AuthController@updatepassword', 'guest');
+Route::get('/password/update', 'HomeController@editPassword')->middleware('guest');
+Route::put('/password/update', 'AuthController@updatepassword')->middleware('guest');
 
-Route::delete('/logout', 'AuthController@logout', 'auth');
+Route::delete('/logout', 'AuthController@logout')->middleware('auth');
