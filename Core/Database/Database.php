@@ -8,12 +8,9 @@ use PDOStatement;
 
 class Database
 {
-    protected PDO $connection;
     protected PDOStatement $statement;
-    public function __construct(PDO $connection)
-    {
-        $this->connection = $connection;
-    }
+    public function __construct(protected PDO $connection) {}
+
     public static function connect($config): PDO|bool
     {
         return Connection::make($config);

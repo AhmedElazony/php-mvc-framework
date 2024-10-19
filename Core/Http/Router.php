@@ -6,46 +6,75 @@ use Core\Middleware\Middleware;
 
 class Router
 {
-    protected static array $routes = [];
+    protected array $routes = [];
+    protected string $method;
+    protected string $uri;
 
-    protected static function add($method, $uri, $controller, $middleware): void
+    protected function add($method, $uri, $controller, $middleware): void
     {
-        static::$routes[$method][$uri] = [
+        $this->routes[$method][$uri] = [
             'controller' => $controller,
             'middleware' => $middleware
         ];
+    }
+    public function get($uri, $controller, $only = null): self
+    {
+        $this->method = 'GET';
+        $this->uri = $uri;
+        $this->add('GET', $uri, $controller, $only);
+        return $this;
+    }
+    public function post($uri, $controller, $only = null): static
+    {
+        $this->method = 'POST';
+        $this->uri = $uri;
+        $this->add('POST', $uri, $controller, $only);
+        return $this;
+    }
+    public function delete($uri, $controller, $only = null): static
+    {
+        $this->method = 'DELETE';
+        $this->uri = $uri;
+        $this->add('DELETE', $uri, $controller, $only);
+        return $this;
+    }
+    public function patch($uri, $controller, $only = null): static
+    {
+        $this->method = 'PATCH';
+        $this->uri = $uri;
+        $this->add('PATCH', $uri, $controller, $only);
+        return $this;
+    }
+    public function put($uri, $controller, $only = null): static
+    {
+        $this->method = 'PUT';
+        $this->uri = $uri;
+        $this->add('PUT', $uri, $controller, $only);
+        return $this;
+    }
 
-//        return new static;
-    }
-    public static function get($uri, $controller, $only = null): void
-    {
-        static::add('GET', $uri, $controller, $only);
-    }
-    public static function post($uri, $controller, $only = null): void
-    {
-        static::add('POST', $uri, $controller, $only);
-    }
-    public static function delete($uri, $controller, $only = null): void
-    {
-        static::add('DELETE', $uri, $controller, $only);
-    }
-    public static function patch($uri, $controller, $only = null): void
-    {
-        static::add('PATCH', $uri, $controller, $only);
-    }
-    public static function put($uri, $controller, $only = null): void
-    {
-        static::add('PUT', $uri, $controller, $only);
-    }
-
-    public static function load($routesFile): static
+    public function load($routesFile): static
     {
         require base_path($routesFile);
-        return new static;
+        return $this;
     }
+
+    public function middleware(string|array $middlewares): static
+    {
+        if (is_array($middlewares)) {
+            foreach ($middlewares as $middleware) {
+                $this->routes[$this->method][$this->uri]['middleware'] = $middleware;
+            }
+        } else {
+            $this->routes[$this->method][$this->uri]['middleware'] = $middlewares;
+        }
+
+        return $this;
+    }
+
     public function resolve($uri, $method)
     {
-        $route = self::$routes[strtoupper($method)][$uri] ?? false;
+        $route = $this->routes[strtoupper($method)][$uri] ?? false;
 
         if ($route) {
             if (is_string($route['controller'])) {

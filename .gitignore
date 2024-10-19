@@ -1,5 +1,6 @@
 
 /vendor/
 /.idea/
+.env
 composer.json
 composer.lock

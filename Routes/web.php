@@ -1,25 +1,25 @@
 <?php
 
-use Core\Http\Router as Route;
+use Core\Facades\Route;
 
 Route::get('', 'HomeController@index');
 Route::get('/about', 'HomeController@about');
 Route::get('/contact', 'HomeController@contact');
 Route::get('/home', 'HomeController@index');
 
-Route::get('/login', 'HomeController@loginUser', 'guest');
-Route::post('/login', 'AuthController@loginUser', 'guest');
+Route::get('/login', 'HomeController@loginUser')->middleware('guest');
+Route::post('/login', 'AuthController@loginUser')->middleware('guest');
 
-Route::get('/register', 'HomeController@registerUser', 'guest');
-Route::post('/register', 'AuthController@registerUser', 'guest');
+Route::get('/register', 'HomeController@registerUser')->middleware('guest');
+Route::post('/register', 'AuthController@registerUser')->middleware('guest');
 
-Route::get('/notes', 'AppController@index', 'auth');
-Route::get('/notes/create', 'AppController@create', 'auth');
-Route::post('/notes/create', 'AppController@saveNote', 'auth');
-Route::get('/notes/edit', 'AppController@edit', 'auth');
-Route::put('/notes/edit', 'AppController@editNote', 'auth');
-Route::get('/note', 'AppController@show', 'auth');
-Route::post('/note', 'AppController@addComment', 'auth');
+Route::get('/notes', 'AppController@index')->middleware('auth');
+Route::get('/notes/create', 'AppController@create')->middleware('auth');
+Route::post('/notes/create', 'AppController@saveNote')->middleware('auth');
+Route::get('/notes/edit', 'AppController@edit')->middleware('auth');
+Route::put('/notes/edit', 'AppController@editNote')->middleware('auth');
+Route::get('/note', 'AppController@show')->middleware('auth');
+Route::post('/note', 'AppController@addComment')->middleware('auth');
 Route::delete('/note', 'AppController@deleteNote', 'auth');
 Route::delete('/note/deleteComment', 'AppController@deleteComment', 'auth');
 

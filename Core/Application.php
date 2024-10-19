@@ -4,7 +4,7 @@ namespace Core;
 
 use Core\Database\QueryBuilder;
 use Core\Http\Request;
-use Core\Http\Router;
+use Core\Facades\Route;
 use Exception;
 
 class Application
@@ -13,7 +13,7 @@ class Application
 
     public static function run()
     {
-        return Router::load('Routes/web.php')
+        return Route::load('Routes/web.php')
             ->resolve(Request::uri(), Request::method());
     }
 
