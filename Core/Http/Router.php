@@ -10,42 +10,42 @@ class Router
     protected string $method;
     protected string $uri;
 
-    protected function add($method, $uri, $controller, $middleware): void
+    protected function add(string $method, string $uri, string|array $controller, array|string $middlewares): void
     {
         $this->routes[$method][$uri] = [
             'controller' => $controller,
-            'middleware' => $middleware
+            'middlewares' => $middlewares
         ];
     }
-    public function get($uri, $controller, $only = null): self
+    public function get(string $uri, string|array $controller, array|string $only = []): self
     {
         $this->method = 'GET';
         $this->uri = $uri;
         $this->add('GET', $uri, $controller, $only);
         return $this;
     }
-    public function post($uri, $controller, $only = null): static
+    public function post(string $uri, string|array $controller, array|string $only = []): static
     {
         $this->method = 'POST';
         $this->uri = $uri;
         $this->add('POST', $uri, $controller, $only);
         return $this;
     }
-    public function delete($uri, $controller, $only = null): static
+    public function delete(string $uri, string|array $controller, array|string $only = []): static
     {
         $this->method = 'DELETE';
         $this->uri = $uri;
         $this->add('DELETE', $uri, $controller, $only);
         return $this;
     }
-    public function patch($uri, $controller, $only = null): static
+    public function patch(string $uri, string|array $controller, array|string $only = []): static
     {
         $this->method = 'PATCH';
         $this->uri = $uri;
         $this->add('PATCH', $uri, $controller, $only);
         return $this;
     }
-    public function put($uri, $controller, $only = null): static
+    public function put(string $uri, string|array $controller, array|string $only = []): static
     {
         $this->method = 'PUT';
         $this->uri = $uri;
@@ -61,13 +61,7 @@ class Router
 
     public function middleware(string|array $middlewares): static
     {
-        if (is_array($middlewares)) {
-            foreach ($middlewares as $middleware) {
-                $this->routes[$this->method][$this->uri]['middleware'] = $middleware;
-            }
-        } else {
-            $this->routes[$this->method][$this->uri]['middleware'] = $middlewares;
-        }
+        $this->routes[$this->method][$this->uri]['middlewares'] = (array) $middlewares;
 
         return $this;
     }
@@ -81,7 +75,9 @@ class Router
                 $parts = explode('@', $route['controller']);
 
                 // handle The Requested Middleware.
-                Middleware::handle($route['middleware']);
+                foreach ($route['middlewares'] as $middleware) {
+                    Middleware::handle($middleware);
+                }
 
                 $controller = 'App\\Controllers\\' . $parts[0];
                 $action = $parts[1];

@@ -19,7 +19,7 @@ abstract class Facade
         return $instance->$method(...$args);
     }
 
-    protected static function resolveFacadeInstance(string $class)
+    protected static function resolveFacadeInstance(string|object $class)
     {
         if (is_object($class)) {
             return $class;
